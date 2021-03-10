@@ -1,0 +1,7 @@
+{
+    "episode": "1.0",
+    "environment" : {
+        "type": "local",
+        "port": "8081" 
+    }
+}
