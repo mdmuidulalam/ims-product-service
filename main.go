@@ -8,9 +8,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"product-service/docs"
+
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/swaggo/swag/example/basic/docs"
+
+	logics "product-service/logics"
+	routes "product-service/routes"
 )
 
 func main() {
@@ -26,12 +30,19 @@ func main() {
 
 	setupApiDoc(r, configInstance.Environment.Port)
 
+	routesReslove := routes.Products{
+		R:                  r,
+		CreateProductLogic: &logics.CreateProductLogic{},
+	}
+
+	routesReslove.New()
+
 	r.Run(":" + configInstance.Environment.Port)
 }
 
 func setupApiDoc(r *gin.Engine, port string) {
-	docs.SwaggerInfo.Title = "Musk Daily API Documentation"
-	docs.SwaggerInfo.Description = "Simple API descriptions for musk daily API"
+	docs.SwaggerInfo.Title = "Product Service API Documentation"
+	docs.SwaggerInfo.Description = "Simple API descriptions for Product Service"
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Host = "localhost:" + port
 	docs.SwaggerInfo.BasePath = ""

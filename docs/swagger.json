@@ -3,5 +3,65 @@
     "info": {
         "contact": {}
     },
-    "paths": {}
+    "paths": {
+        "/create": {
+            "post": {
+                "description": "It will create a product from provided information",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Create a product",
+                "operationId": "create-product",
+                "parameters": [
+                    {
+                        "description": "DisplayId of a product",
+                        "name": "displayId",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "Name of a product",
+                        "name": "name",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "Description of a product",
+                        "name": "description",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "250": {
+                        "description": "A product is created",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    "251": {
+                        "description": "DisplayId of this product exists",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    "252": {
+                        "description": "Name of this product exists",
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

@@ -1,4 +1,43 @@
 info:
   contact: {}
-paths: {}
+paths:
+  /create:
+    post:
+      consumes:
+      - application/json
+      description: It will create a product from provided information
+      operationId: create-product
+      parameters:
+      - description: DisplayId of a product
+        in: body
+        name: displayId
+        required: true
+        schema:
+          type: string
+      - description: Name of a product
+        in: body
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: Description of a product
+        in: body
+        name: description
+        required: true
+        schema:
+          type: string
+      responses:
+        "250":
+          description: A product is created
+          schema:
+            type: boolean
+        "251":
+          description: DisplayId of this product exists
+          schema:
+            type: boolean
+        "252":
+          description: Name of this product exists
+          schema:
+            type: boolean
+      summary: Create a product
 swagger: "2.0"
