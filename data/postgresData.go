@@ -3,6 +3,7 @@ package data
 import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type PostgresData struct {
@@ -16,7 +17,9 @@ func (postgresData *PostgresData) GetDatabaseInstance() *gorm.DB {
 func (postgresData *PostgresData) Connect() {
 	dsn := "host=localhost user=postgres password=DefaultPassword dbname=ps-defaultClient port=5432 sslmode=disable TimeZone=Asia/Dhaka"
 	var err error
-	if postgresData.databaseInstance, err = gorm.Open(postgres.Open(dsn), &gorm.Config{}); err != nil {
+	if postgresData.databaseInstance, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	}); err != nil {
 		panic(err)
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"product-service/config"
+	"product-service/data"
 	"runtime/debug"
 
 	"github.com/gin-gonic/gin"
@@ -31,8 +32,12 @@ func main() {
 	setupApiDoc(r, configInstance.Environment.Port)
 
 	routesReslove := routes.Products{
-		R:                  r,
-		CreateProductLogic: &logics.CreateProductLogic{},
+		R: r,
+		CreateProductLogic: &logics.CreateProductLogic{
+			ProductData: &data.ProductsData{
+				PostgresData: &data.PostgresData{},
+			},
+		},
 	}
 
 	routesReslove.New()

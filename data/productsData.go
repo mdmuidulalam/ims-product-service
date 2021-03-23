@@ -7,7 +7,7 @@ import (
 
 type ProductsData struct {
 	Id           int                         `gorm:"column:id"`
-	DisplayId    string                      `gorm:"column:displayid"`
+	DisplayId    string                      `gorm:"column:displayId"`
 	Name         string                      `gorm:"column:name"`
 	Description  string                      `gorm:"column:description"`
 	PostgresData datainterface.IPostgresData `gorm:"-"`
@@ -30,9 +30,17 @@ func (productsData *ProductsData) GetDescription() string {
 }
 
 func (productsData *ProductsData) FindProduct(conditions []map[string]interface{}) *logicinterface.IProductInformation {
-	queryContext := productsData.PostgresData.PrepareWhereClause(productsData.PostgresData.GetDatabaseInstance().Table("products"), conditions)
-	queryContext.Find(&productsData)
+	productsData.PostgresData.Connect()
+	defer productsData.PostgresData.Disconnect()
 
-	var productInformation logicinterface.IProductInformation = productsData
-	return &productInformation
+	product := ProductsData{}
+	dbInstance := productsData.PostgresData.GetDatabaseInstance()
+	queryContext := productsData.PostgresData.PrepareWhereClause(dbInstance.Table("products"), conditions)
+	queryContext.Find(&product)
+	if product.Id != 0 {
+		var productInformation logicinterface.IProductInformation = &product
+		return &productInformation
+	} else {
+		return nil
+	}
 }
