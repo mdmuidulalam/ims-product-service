@@ -1,4 +1,54 @@
 info:
   contact: {}
-paths: {}
+paths:
+  /create:
+    post:
+      consumes:
+      - application/json
+      description: It will create a product from provided information
+      operationId: create-product
+      parameters:
+      - description: DisplayId of a product
+        in: body
+        name: displayId
+        required: true
+        schema:
+          type: string
+      - description: Name of a product
+        in: body
+        name: name
+        required: true
+        schema:
+          type: string
+      - description: Description of a product
+        in: body
+        name: description
+        required: true
+        schema:
+          type: string
+      responses:
+        "250":
+          description: A product is created. ErrorTypes array will be empty.
+          schema:
+            allOf:
+            - type: object
+            - properties:
+                errorTypes:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "251":
+          description: All ready a product with displayId or name. ErrorType{1 =>
+            displayId, 2 => name}
+          schema:
+            allOf:
+            - type: object
+            - properties:
+                errorTypes:
+                  items:
+                    type: string
+                  type: array
+              type: object
+      summary: Create a product
 swagger: "2.0"
