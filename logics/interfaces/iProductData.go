@@ -2,8 +2,30 @@ package logicinterface
 
 type IProductData interface {
 	/*
-	* Action: Find a Product
-	* Return (conditions) => (Product)
+	* Action: Connect with database
 	 */
-	FindProduct(conditions []map[string]interface{}) *IProductInformation
+	ConnectDatabase()
+
+	/*
+	* Action: Disconnect with database
+	 */
+	DisconnectDatabase()
+
+	/*
+	* Action: Find a Product
+	* Return (conditions, productChan) => (Product, channel)
+	 */
+	FindProduct(conditions []map[string]interface{}, productChan chan IProductInformation)
+
+	/*
+	* Action: Insert a Product
+	* Return (productChan) => (channel)
+	 */
+	InsertProduct(productChan chan int)
+
+	// * Attribute value setters
+	SetId(int)
+	SetName(string)
+	SetDisplayId(string)
+	SetDescription(string)
 }

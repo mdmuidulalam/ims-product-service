@@ -1,6 +1,8 @@
 {
     "cSpell.words": [
         "Postgres",
-        "gorm"
+        "dbname",
+        "gorm",
+        "swaggo"
     ]
 }

@@ -28,16 +28,27 @@ paths:
           type: string
       responses:
         "250":
-          description: A product is created
+          description: A product is created. ErrorTypes array will be empty.
           schema:
-            type: boolean
+            allOf:
+            - type: object
+            - properties:
+                errorTypes:
+                  items:
+                    type: string
+                  type: array
+              type: object
         "251":
-          description: DisplayId of this product exists
+          description: All ready a product with displayId or name. ErrorType{1 =>
+            displayId, 2 => name}
           schema:
-            type: boolean
-        "252":
-          description: Name of this product exists
-          schema:
-            type: boolean
+            allOf:
+            - type: object
+            - properties:
+                errorTypes:
+                  items:
+                    type: string
+                  type: array
+              type: object
       summary: Create a product
 swagger: "2.0"

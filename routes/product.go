@@ -23,9 +23,8 @@ func (prod *Products) New() {
 // @Param displayId body string true "DisplayId of a product"
 // @Param name body string true "Name of a product"
 // @Param description body string true "Description of a product"
-// @Success 250 {boolean} boolean "A product is created"
-// @Success 251 {boolean} boolean "DisplayId of this product exists"
-// @Success 252 {boolean} boolean "Name of this product exists"
+// @Success 250 {object} object{errorTypes=[]string} "A product is created. ErrorTypes array will be empty."
+// @success 251 {object} object{errorTypes=[]string} "All ready a product with displayId or name. ErrorType{1 => displayId, 2 => name}"
 func (prod *Products) Create(c *gin.Context) {
 	var productInfo productInformation
 	if err := c.ShouldBind(&productInfo); err != nil {
@@ -36,7 +35,11 @@ func (prod *Products) Create(c *gin.Context) {
 	prod.CreateProductLogic.SetName(productInfo.Name)
 	prod.CreateProductLogic.SetDescription(productInfo.Description)
 
-	c.Writer.WriteHeader(250 + prod.CreateProductLogic.CreateProduct())
+	statusCode, errorTypes := prod.CreateProductLogic.CreateProduct()
+
+	c.JSON(250+statusCode, gin.H{
+		"errorTypes": errorTypes,
+	})
 }
 
 //* Data Classes
@@ -45,5 +48,5 @@ func (prod *Products) Create(c *gin.Context) {
 type productInformation struct {
 	DisplayId   string `json:"displayId" binding:"required"`
 	Name        string `json:"name" binding:"required"`
-	Description string `json:"description" binding:"required"`
+	Description string `json:"description"`
 }

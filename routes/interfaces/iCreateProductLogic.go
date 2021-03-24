@@ -3,12 +3,11 @@ package routesinterface
 type ICreateProductLogic interface {
 	/*
 	* Action: Create a Product
-	* Return (int) => (Status)
-	* Return => (0) => Product creation successfull
-	* Return => (1) => A product with same displayId already exists
-	* Return => (2) => A product with sane name already exists
+	* Return (int, []string) => (Status, ErrorTypes)
+	* Return => (0, []) => Product creation successfull
+	* Return => (1, [1,2]) => A product with same displayId or name already exists. ErrorType{1 => displayId, 2 => name}
 	 */
-	CreateProduct() int
+	CreateProduct() (int, []int)
 
 	// * Attribute value setters
 	SetName(string)
