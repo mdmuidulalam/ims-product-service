@@ -4,7 +4,6 @@ import (
 	"log"
 	"os"
 	"product-service/config"
-	"product-service/data"
 	"runtime/debug"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +13,6 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	logics "product-service/logics"
 	routes "product-service/routes"
 )
 
@@ -31,16 +29,7 @@ func main() {
 
 	setupApiDoc(r, configInstance.Environment.Port)
 
-	routesReslove := routes.Products{
-		R: r,
-		CreateProductLogic: &logics.CreateProductLogic{
-			ProductData: &data.ProductsData{
-				PostgresData: &data.PostgresData{},
-			},
-		},
-	}
-
-	routesReslove.New()
+	routes.ProductsRoutes(r)
 
 	r.Run(":" + configInstance.Environment.Port)
 }
