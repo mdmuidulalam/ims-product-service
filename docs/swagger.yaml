@@ -35,7 +35,7 @@ paths:
             - properties:
                 errorTypes:
                   items:
-                    type: string
+                    type: integer
                   type: array
               type: object
         "251":
@@ -47,8 +47,43 @@ paths:
             - properties:
                 errorTypes:
                   items:
-                    type: string
+                    type: integer
                   type: array
               type: object
       summary: Create a product
+  /readdisplaycard:
+    get:
+      consumes:
+      - application/json
+      description: It will collect primary data for display card for a product
+      operationId: read-display-card-product
+      parameters:
+      - description: Id of a product
+        in: body
+        name: Id
+        required: true
+        schema:
+          type: integer
+      responses:
+        "250":
+          description: Display card data of a product
+          schema:
+            allOf:
+            - type: object
+            - properties:
+                product:
+                  type: object
+              type: object
+        "251":
+          description: No product found with this id
+          schema:
+            allOf:
+            - type: object
+            - properties:
+                errorTypes:
+                  items:
+                    type: integer
+                  type: array
+              type: object
+      summary: Read data for display card for a product
 swagger: "2.0"

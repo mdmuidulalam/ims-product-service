@@ -75,7 +75,7 @@ var doc = `{
                                         "errorTypes": {
                                             "type": "array",
                                             "items": {
-                                                "type": "string"
+                                                "type": "integer"
                                             }
                                         }
                                     }
@@ -96,7 +96,69 @@ var doc = `{
                                         "errorTypes": {
                                             "type": "array",
                                             "items": {
-                                                "type": "string"
+                                                "type": "integer"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/readdisplaycard": {
+            "get": {
+                "description": "It will collect primary data for display card for a product",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Read data for display card for a product",
+                "operationId": "read-display-card-product",
+                "parameters": [
+                    {
+                        "description": "Id of a product",
+                        "name": "Id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "250": {
+                        "description": "Display card data of a product",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "type": "object"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "product": {
+                                            "type": "object"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "251": {
+                        "description": "No product found with this id",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "type": "object"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "errorTypes": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "integer"
                                             }
                                         }
                                     }
