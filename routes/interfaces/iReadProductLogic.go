@@ -1,4 +1,4 @@
-package routesinterface
+package routeinterface
 
 type IReadProductLogic interface {
 	/*
@@ -6,6 +6,12 @@ type IReadProductLogic interface {
 	* Return (int) => (Status)
 	 */
 	ReadDisplayCard() int
+
+	/*
+	* Action: Read Bulk Data of Products
+	* Return ([]*IReadProductLogic) => (Array of product read interface)
+	 */
+	ReadBulk(pageNumber int, pageSize int, orderBy string, isOrderbyIncreasing bool) []*IReadProductLogic
 
 	// * Attribute value setters
 	SetId(id int)

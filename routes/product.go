@@ -5,7 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	routesinterface "product-service/routes/interfaces"
+	routeinterface "product-service/routes/interfaces"
 
 	"product-service/data"
 	"product-service/logics"
@@ -14,6 +14,7 @@ import (
 func ProductsRoutes(router *gin.Engine) {
 	router.POST("/create", create)
 	router.GET("/readdisplaycard", readDisplayCard)
+	router.GET("/readbulk", readBulk)
 }
 
 // @Summary Create a product
@@ -35,7 +36,7 @@ func create(c *gin.Context) {
 		return
 	}
 
-	var createProductLogic routesinterface.ICreateProductLogic
+	var createProductLogic routeinterface.ICreateProductLogic
 	createProductLogic = &logics.CreateProductLogic{
 		ProductData: &data.ProductsData{
 			PostgresData: &data.PostgresData{},
@@ -72,7 +73,7 @@ func readDisplayCard(c *gin.Context) {
 		return
 	}
 
-	var readProductLogic routesinterface.IReadProductLogic
+	var readProductLogic routeinterface.IReadProductLogic
 	readProductLogic = &logics.ReadProductLogic{
 		ProductData: &data.ProductsData{
 			PostgresData: &data.PostgresData{},
@@ -96,6 +97,52 @@ func readDisplayCard(c *gin.Context) {
 
 	c.JSON(251+statusCode, gin.H{
 		"product": productJson,
+	})
+}
+
+// @Summary Read bulk data for products
+// @Description It will collect primary data for products
+// @ID read-bulk
+// @Router /readbulk [get]
+// @Accept json
+// @Param pagenumber body int true "pageNumber of products bulk data"
+// @Param pagesize body int true "pageSize of products bulk data"
+// @Param orderby body string true "orderBy of products bulk data"
+// @Param isorderbyincreasing body bool true "isOrderbyIncreasing of products bulk data"
+// @Success 250 {object} object{products=[]object} "Products bulk data"
+func readBulk(c *gin.Context) {
+	pageNumber, err1 := strconv.Atoi(c.Query("pagenumber"))
+	pageSize, err2 := strconv.Atoi(c.Query("pagesize"))
+	orderBy := c.Query("orderby")
+	isOrderbyIncreasing, err3 := strconv.ParseBool(c.Query("isorderbyincreasing"))
+
+	if err1 != nil || pageNumber <= 0 || err2 != nil || pageSize <= 0 || len(orderBy) == 0 || err3 != nil {
+		c.JSON(400, gin.H{
+			"message": "Bad Request (Data representation not correct). Please, observe the API doc.",
+		})
+		return
+	}
+
+	var readProductLogic routeinterface.IReadProductLogic
+	readProductLogic = &logics.ReadProductLogic{
+		ProductData: &data.ProductsData{
+			PostgresData: &data.PostgresData{},
+		},
+	}
+
+	products := readProductLogic.ReadBulk(pageNumber, pageSize, orderBy, isOrderbyIncreasing)
+	productsJson := []gin.H{}
+	for _, element := range products {
+		productsJson = append(productsJson, gin.H{
+			"id":          (*element).GetId(),
+			"displayId":   (*element).GetDisplayId(),
+			"name":        (*element).GetName(),
+			"description": (*element).GetDescription(),
+		})
+	}
+
+	c.JSON(250, gin.H{
+		"products": productsJson,
 	})
 }
 

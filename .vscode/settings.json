@@ -3,6 +3,7 @@
         "Postgres",
         "dbname",
         "gorm",
+        "isorderbyincreasing",
         "swaggo"
     ]
 }
