@@ -66,6 +66,23 @@ func (productsData *ProductsData) FindProduct(conditions []map[string]interface{
 	}
 }
 
+func (productsData *ProductsData) FindProducts(productsChan chan []logicinterface.IProductInformation, pageNumber int, pageSize int, orderBy string, isOrderbyIncreasing bool) {
+	dbInstance := productsData.PostgresData.GetDatabaseInstance()
+
+	if !isOrderbyIncreasing {
+		orderBy += " desc"
+	}
+
+	products := []ProductsData{}
+	dbInstance.Table("products").Order("\"" + orderBy + "\"").Offset((pageNumber - 1) * pageSize).Limit(pageSize).Find(&products)
+
+	result := make([]logicinterface.IProductInformation, len(products))
+	for index, _ := range products {
+		result[index] = &products[index]
+	}
+	productsChan <- result
+}
+
 func (productsData *ProductsData) InsertProduct(productChan chan int) {
 	productsData.Id = 0
 	queryContext := productsData.PostgresData.GetDatabaseInstance().Table("products")

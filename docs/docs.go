@@ -107,6 +107,77 @@ var doc = `{
                 }
             }
         },
+        "/readbulk": {
+            "get": {
+                "description": "It will collect primary data for products",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "Read bulk data for products",
+                "operationId": "read-bulk",
+                "parameters": [
+                    {
+                        "description": "pageNumber of products bulk data",
+                        "name": "pagenumber",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "description": "pageSize of products bulk data",
+                        "name": "pagesize",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "description": "orderBy of products bulk data",
+                        "name": "orderby",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "isOrderbyIncreasing of products bulk data",
+                        "name": "isorderbyincreasing",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    }
+                ],
+                "responses": {
+                    "250": {
+                        "description": "Products bulk data",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "type": "object"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "products": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/readdisplaycard": {
             "get": {
                 "description": "It will collect primary data for display card for a product",

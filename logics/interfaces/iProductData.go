@@ -18,6 +18,12 @@ type IProductData interface {
 	FindProduct(conditions []map[string]interface{}, productChan chan IProductInformation)
 
 	/*
+	* Action: Find Products
+	* Return (productsChan) => (channel)
+	 */
+	FindProducts(productsChan chan []IProductInformation, pageNumber int, pageSize int, orderBy string, isOrderbyIncreasing bool)
+
+	/*
 	* Action: Insert a Product
 	* Return (productChan) => (channel)
 	 */

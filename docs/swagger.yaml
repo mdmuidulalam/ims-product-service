@@ -51,6 +51,50 @@ paths:
                   type: array
               type: object
       summary: Create a product
+  /readbulk:
+    get:
+      consumes:
+      - application/json
+      description: It will collect primary data for products
+      operationId: read-bulk
+      parameters:
+      - description: pageNumber of products bulk data
+        in: body
+        name: pagenumber
+        required: true
+        schema:
+          type: integer
+      - description: pageSize of products bulk data
+        in: body
+        name: pagesize
+        required: true
+        schema:
+          type: integer
+      - description: orderBy of products bulk data
+        in: body
+        name: orderby
+        required: true
+        schema:
+          type: string
+      - description: isOrderbyIncreasing of products bulk data
+        in: body
+        name: isorderbyincreasing
+        required: true
+        schema:
+          type: boolean
+      responses:
+        "250":
+          description: Products bulk data
+          schema:
+            allOf:
+            - type: object
+            - properties:
+                products:
+                  items:
+                    type: object
+                  type: array
+              type: object
+      summary: Read bulk data for products
   /readdisplaycard:
     get:
       consumes:

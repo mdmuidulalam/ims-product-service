@@ -1,4 +1,4 @@
-package routesinterface
+package routeinterface
 
 type ICreateProductLogic interface {
 	/*
