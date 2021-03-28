@@ -8,6 +8,12 @@ type IReadProductLogic interface {
 	ReadDisplayCard() int
 
 	/*
+	* Action: Read Data of a Product
+	* Return (int) => (Status)
+	 */
+	Read() int
+
+	/*
 	* Action: Read Bulk Data of Products
 	* Return ([]*IReadProductLogic) => (Array of product read interface)
 	 */

@@ -57,6 +57,31 @@ func (readProductLogic *ReadProductLogic) ReadDisplayCard() int {
 	return statusCode
 }
 
+func (readProductLogic *ReadProductLogic) Read() int {
+	readProductLogic.ProductData.ConnectDatabase()
+	defer readProductLogic.ProductData.DisconnectDatabase()
+
+	productChan := make(chan logicinterface.IProductInformation)
+	conditions := []map[string]interface{}{{
+		"id": readProductLogic.id,
+	}}
+	go readProductLogic.ProductData.FindProduct(conditions, productChan)
+
+	product := <-productChan
+
+	statusCode := 0
+	if product != nil {
+		readProductLogic.displayId = product.GetDisplayId()
+		readProductLogic.name = product.GetName()
+		readProductLogic.description = product.GetDescription()
+	} else {
+		statusCode = 1
+		readProductLogic.id = 0
+	}
+
+	return statusCode
+}
+
 func (readProductLogic *ReadProductLogic) ReadBulk(pageNumber int, pageSize int, orderBy string, isOrderbyIncreasing bool) []*routeinterface.IReadProductLogic {
 	readProductLogic.ProductData.ConnectDatabase()
 	defer readProductLogic.ProductData.DisconnectDatabase()

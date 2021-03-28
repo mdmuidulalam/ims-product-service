@@ -14,6 +14,7 @@ import (
 func ProductsRoutes(router *gin.Engine) {
 	router.POST("/create", create)
 	router.GET("/readdisplaycard", readDisplayCard)
+	router.GET("/read", read)
 	router.GET("/readbulk", readBulk)
 }
 
@@ -51,6 +52,53 @@ func create(c *gin.Context) {
 
 	c.JSON(250+statusCode, gin.H{
 		"errorTypes": errorTypes,
+	})
+}
+
+// @Summary Read data for a product
+// @Description It will collect all data attributes for a product
+// @ID read-product
+// @Router /read [get]
+// @Accept json
+// @Param Id body int true "Id of a product"
+// @Success 250 {object} object{product=object} "Data of a product"
+// @Success 251 {object} object{errorTypes=[]int} "No product found with this id"
+func read(c *gin.Context) {
+	var id int
+	var err error
+
+	if id, err = strconv.Atoi(c.Query("id")); id <= 0 || err != nil {
+		c.JSON(400, gin.H{
+			"message": "Bad Request (Data representation not correct). Please, observe the API doc.",
+		})
+		return
+	}
+
+	var readProductLogic routeinterface.IReadProductLogic
+	readProductLogic = &logics.ReadProductLogic{
+		ProductData: &data.ProductsData{
+			PostgresData: &data.PostgresData{},
+		},
+	}
+
+	readProductLogic.SetId(id)
+	statusCode := readProductLogic.Read()
+
+	productJson := gin.H{
+		"product": gin.H{},
+	}
+	if readProductLogic.GetId() != 0 {
+		productJson = gin.H{
+			"product": gin.H{
+				"displayId":   readProductLogic.GetDisplayId(),
+				"name":        readProductLogic.GetName(),
+				"description": readProductLogic.GetDescription(),
+			},
+		}
+	}
+
+	c.JSON(250+statusCode, gin.H{
+		"product": productJson,
 	})
 }
 
@@ -95,7 +143,7 @@ func readDisplayCard(c *gin.Context) {
 		}
 	}
 
-	c.JSON(251+statusCode, gin.H{
+	c.JSON(250+statusCode, gin.H{
 		"product": productJson,
 	})
 }
